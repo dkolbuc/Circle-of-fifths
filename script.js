@@ -1,3 +1,6 @@
+/* -----------------------------
+   AUDIO UNLOCK FOR IOS / HTTPS
+------------------------------ */
 let audioCtx = null;
 
 function directIOSAudioUnlock() {
@@ -9,14 +12,17 @@ function directIOSAudioUnlock() {
   }
 }
 
-// MUST be direct, not wrapped
 window.addEventListener('touchstart', directIOSAudioUnlock, { once: true });
 window.addEventListener('click', directIOSAudioUnlock, { once: true });
 
-
+function ensureAudioContext() {
+  if (!audioCtx) {
+    directIOSAudioUnlock();
+  }
+}
 
 /* -----------------------------
-   DATA MODEL (with enharmonics, musical notation)
+   DATA MODEL (with enharmonics)
 ------------------------------ */
 const circle = [
   {
@@ -497,6 +503,92 @@ function renderCadences(majorTriads, minorTriads, keyName){
 }
 
 /* -----------------------------
+   COMMON PROGRESSIONS
+------------------------------ */
+
+const MAJOR_PROGRESSIONS = [
+  {
+    name: 'Pop progression',
+    pattern: ['I','V','vi','IV'],
+    func: 'Very common in pop music'
+  },
+  {
+    name: '50s progression',
+    pattern: ['I','vi','IV','V'],
+    func: 'Classic doo-wop / 50s sound'
+  },
+  {
+    name: 'ii–V–I',
+    pattern: ['ii','V','I'],
+    func: 'Core jazz cadence'
+  }
+];
+
+const MINOR_PROGRESSIONS = [
+  {
+    name: 'i–VII–VI–VII',
+    pattern: ['i','VII','VI','VII'],
+    func: 'Common natural minor loop'
+  },
+  {
+    name: 'Andalusian cadence',
+    pattern: ['i','VII','VI','V'],
+    func: 'Flamenco / Spanish flavour'
+  },
+  {
+    name: 'i–iv–v',
+    pattern: ['i','iv','v'],
+    func: 'Simple minor progression'
+  }
+];
+
+function renderProgressions(majorTriads, minorTriads, keyName){
+  const parts = [];
+
+  parts.push(`<div class="cadenceGroup">`);
+  parts.push(`<div class="cadenceHeader">In ${keyName} major</div>`);
+  MAJOR_PROGRESSIONS.forEach((p, idx) => {
+    const chords = p.pattern.map(rn => {
+      const t = findTriadByRN(majorTriads, rn);
+      return t ? `${rn} (${t.chord})` : rn;
+    }).join(' → ');
+    parts.push(`
+      <div class="progressionRow" data-prog-type="major" data-prog-index="${idx}">
+        <div class="progressionName">${p.name}</div>
+        <div class="progressionRoman">${p.func}</div>
+        <div class="progressionExample">${chords}</div>
+        <div class="progressionPlay">
+          <button class="btn btnSecondary btnPlayProgression">Play</button>
+        </div>
+      </div>
+    `);
+  });
+  parts.push(`</div>`);
+
+  parts.push(`<div class="cadenceGroup">`);
+  parts.push(`<div class="cadenceHeader">In ${keyName.toLowerCase()} minor</div>`);
+  MINOR_PROGRESSIONS.forEach((p, idx) => {
+    const chords = p.pattern.map(rn => {
+      const t = findTriadByRN(minorTriads, rn);
+      return t ? `${rn} (${t.chord})` : rn;
+    }).join(' → ');
+    parts.push(`
+      <div class="progressionRow" data-prog-type="minor" data-prog-index="${idx}">
+        <div class="progressionName">${p.name}</div>
+        <div class="progressionRoman">${p.func}</div>
+        <div class="progressionExample">${chords}</div>
+        <div class="progressionPlay">
+          <button class="btn btnSecondary btnPlayProgression">Play</button>
+        </div>
+      </div>
+    `);
+  });
+  parts.push(`</div>`);
+
+  return parts.join('');
+}
+
+/* -----------------------------
    TITLE & REFERENCE HELPERS
 ------------------------------ */
 
@@ -573,12 +665,6 @@ function formatFifthLines(i){
    AUDIO (Piano-like synth)
 ------------------------------ */
 
-document.addEventListener('click', () => {
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-}, { once: true });
-
 let activeNodes = [];
 let playbackMode = 'arpeggio'; // 'block' or 'arpeggio'
 
@@ -592,12 +678,7 @@ const NOTE_BASES = {
   'B': 11
 };
 
-function ensureAudioContext() {
-  if (!audioCtx) initAudio();
-}
-
 function parseNoteToSemitone(note){
-  // Accepts "C", "C♯", "C♭", "E♯", "F♭", etc.
   const m = note.match(/^([A-Ga-g])([♯♭]?)/);
   if (!m) return 0;
   let letter = m[1].toUpperCase();
@@ -607,13 +688,12 @@ function parseNoteToSemitone(note){
   if (accidental === '♯') semitone += 1;
   if (accidental === '♭') semitone -= 1;
 
-  // Wrap into 0–11
   semitone = ((semitone % 12) + 12) % 12;
   return semitone;
 }
 
 function noteToFrequency(note, keyRoot){
-  const baseMidiC4 = 60; // C4
+  const baseMidiC4 = 60;
   const keyRootSemitone = parseNoteToSemitone(keyRoot);
   const tonicMidi = baseMidiC4 + keyRootSemitone;
 
@@ -630,7 +710,6 @@ function noteToFrequency(note, keyRoot){
 function createPianoOscillator(freq, startTime, duration){
   ensureAudioContext();
 
-  // Oscillator with custom harmonic spectrum
   const oscL = audioCtx.createOscillator();
   const oscR = audioCtx.createOscillator();
   const gainL = audioCtx.createGain();
@@ -638,28 +717,24 @@ function createPianoOscillator(freq, startTime, duration){
   const noise = audioCtx.createBufferSource();
   const noiseGain = audioCtx.createGain();
 
-  // Custom harmonic profile: fundamental + richer harmonics
   const real = new Float32Array([0, 1.0, 0.75, 0.4, 0.2, 0.1]);
   const imag = new Float32Array(real.length);
   const wave = audioCtx.createPeriodicWave(real, imag);
   oscL.setPeriodicWave(wave);
   oscR.setPeriodicWave(wave);
 
-  // Slight detune between channels for width
   oscL.frequency.value = freq;
   oscR.frequency.value = freq * 1.002;
 
-  oscL.detune.value = (Math.random() * 6) - 3; // ±3 cents
+  oscL.detune.value = (Math.random() * 6) - 3;
   oscR.detune.value = (Math.random() * 6) - 3;
 
-  // Stereo pan via gains (L/R balance)
   const mainGain = audioCtx.createGain();
   gainL.gain.value = 0.6;
   gainR.gain.value = 0.6;
   mainGain.gain.value = 0.6;
 
-  // Hammer noise: short burst of filtered noise at attack
-  const bufferSize = audioCtx.sampleRate * 0.05; // 50ms
+  const bufferSize = audioCtx.sampleRate * 0.05;
   const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
   const data = buffer.getChannelData(0);
   for (let i = 0; i < bufferSize; i++){
@@ -678,7 +753,6 @@ function createPianoOscillator(freq, startTime, duration){
   filter.connect(noiseGain);
   noiseGain.connect(mainGain);
 
-  // Piano-like ADSR envelope on mainGain
   const attack = 0.01;
   const decay = 0.2;
   const sustain = 0.25;
@@ -705,7 +779,7 @@ function createPianoOscillator(freq, startTime, duration){
   oscR.stop(stopTime);
   noise.stop(startTime + 0.08);
 
-  activeNodes.push(oscL, oscR, noise);
+  activeNodes.push(oscL, oscR, noise, noiseGain, filter, mainGain, gainL, gainR);
 }
 
 function playTone(freq, startTime, duration){
@@ -727,10 +801,12 @@ function playScale(notes, keyRoot){
   const now = audioCtx.currentTime;
   const step = 0.35;
 
-  notes.forEach((n, idx) => {
+  const playbackNotes = [...notes, notes[0]]; // include octave
+
+  playbackNotes.forEach((n, idx) => {
     const t = now + idx * step;
     const freq = noteToFrequency(n, keyRoot);
-    playTone(freq, t, 0.6);
+    playTone(freq, t, 0.5);
   });
 }
 
@@ -744,7 +820,7 @@ function playChord(notes, keyRoot, startTime){
     notes.forEach((n, idx) => {
       const t = startTime + idx * 0.08;
       const freq = noteToFrequency(n, keyRoot);
-      playTone(freq, t, 0.5);
+      playTone(freq, t, 0.6);
     });
   }
 }
@@ -757,13 +833,21 @@ function playChordSequence(chords, keyRoot){
   stopAllAudio();
   ensureAudioContext();
   const now = audioCtx.currentTime;
-  const step = 0.9;
+  const step = 1.0;
 
   chords.forEach((chord, idx) => {
     const t = now + idx * step;
     const notes = parseChordNotes(chord.chord);
     playChord(notes, keyRoot, t);
   });
+}
+
+function playChordSequenceFromRN(pattern, triads, keyRoot){
+  const seq = pattern
+    .map(rn => findTriadByRN(triads, rn))
+    .filter(Boolean);
+  if (seq.length === 0) return;
+  playChordSequence(seq, keyRoot);
 }
 
 /* -----------------------------
@@ -776,12 +860,10 @@ function selectKey(i){
   currentIndex = i;
   const data = circle[i];
 
-  // Clear highlights
   document.querySelectorAll('.wedge').forEach(w => w.classList.remove('selected-wedge'));
   document.querySelectorAll('.majorLabel').forEach(t => t.classList.remove('selected-label'));
   document.querySelectorAll('.minorLabel').forEach(t => t.classList.remove('selected-label'));
 
-  // Highlight
   document.querySelectorAll(`.wedge[data-index="${i}"]`)
     .forEach(w => w.classList.add('selected-wedge'));
 
@@ -791,17 +873,14 @@ function selectKey(i){
   document.querySelectorAll(`.minorLabel[data-index="${i}"]`)
     .forEach(t => t.classList.add('selected-label'));
 
-  // Title & key signature
   document.getElementById('keyTitle').textContent = buildTitle(data);
   document.getElementById('sig').textContent = data.sig;
 
-  // Scales
   document.getElementById('majorNotes').innerHTML = formatMajorScales(data);
   document.getElementById('minorNotes').innerHTML = formatMinorScales(data);
   document.getElementById('majorFormula').textContent = MAJOR_FORMULA;
   document.getElementById('minorFormula').textContent = NATURAL_MINOR_FORMULA;
 
-  // Triads
   const majorTriads = buildTriads(data.majorNotes, MAJOR_TRIAD_QUALITIES);
   const minorTriads = buildTriads(data.minorNotes, MINOR_TRIAD_QUALITIES);
 
@@ -820,7 +899,6 @@ function selectKey(i){
   document.getElementById('minorTriads').innerHTML =
     renderTriadSection(minorTriads, data.minor, data.altMinor, altMinorTriads);
 
-  // Sevenths
   const majorSevenths = buildSevenths(data.majorNotes, MAJOR_SEVENTH_QUALITIES);
   const minorSevenths = buildSevenths(data.minorNotes, MINOR_SEVENTH_QUALITIES);
 
@@ -839,11 +917,12 @@ function selectKey(i){
   document.getElementById('minorSevenths').innerHTML =
     renderSeventhSection(minorSevenths, data.minor, data.altMinor, altMinorSevenths);
 
-  // Cadences (use main spelling for header)
   document.getElementById('cadenceList').innerHTML =
     renderCadences(majorTriads, minorTriads, data.major);
 
-  // Reference box
+  document.getElementById('progressionList').innerHTML =
+    renderProgressions(majorTriads, minorTriads, data.major);
+
   const relativeLine = formatRelativeLine(data);
   const parallelLine = formatParallelLine(data);
   const fifthInfo = formatFifthLines(i);
@@ -997,6 +1076,39 @@ if (triadButtonContainer){
 }
 if (seventhButtonContainer){
   seventhButtonContainer.addEventListener('click', handleChordButtonClick);
+}
+
+/* -----------------------------
+   Progression play buttons
+------------------------------ */
+
+const progressionListEl = document.getElementById('progressionList');
+
+if (progressionListEl){
+  progressionListEl.addEventListener('click', e => {
+    const btn = e.target.closest('.btnPlayProgression');
+    if (!btn) return;
+
+    const row = btn.closest('.progressionRow');
+    if (!row) return;
+
+    const type = row.dataset.progType;
+    const idx = parseInt(row.dataset.progIndex, 10);
+    const data = circle[currentIndex];
+
+    const majorTriads = buildTriads(data.majorNotes, MAJOR_TRIAD_QUALITIES);
+    const minorTriads = buildTriads(data.minorNotes, MINOR_TRIAD_QUALITIES);
+
+    if (type === 'major'){
+      const prog = MAJOR_PROGRESSIONS[idx];
+      if (!prog) return;
+      playChordSequenceFromRN(prog.pattern, majorTriads, data.major);
+    } else {
+      const prog = MINOR_PROGRESSIONS[idx];
+      if (!prog) return;
+      playChordSequenceFromRN(prog.pattern, minorTriads, data.major);
+    }
+  });
 }
 
 /* -----------------------------
