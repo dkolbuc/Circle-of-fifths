@@ -790,3 +790,30 @@ svg {
     font-size: 1rem;
   }
 }
+
+/* -----------------------------------------
+   MOBILE FIX — CENTER BUTTON TEXT
+   ----------------------------------------- */
+@media (max-width: 640px) {
+
+  /* Ensure scale buttons are centered */
+  #playMajorScale,
+  #playMinorScale {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    padding: 10px 0;
+  }
+
+  /* Ensure Stop button is centered */
+  #stopAudio {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    padding: 10px 0;
+  }
+}
