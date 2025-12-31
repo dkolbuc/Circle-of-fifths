@@ -705,56 +705,88 @@ svg {
 }
 
 /* -----------------------------------------
-   MOBILE SPACING IMPROVEMENTS — AUDIO PANEL
+   MOBILE FIX — AUDIO PLAYBACK BUTTON LAYOUT
    ----------------------------------------- */
 @media (max-width: 640px) {
 
-  /* 1. Stack audio rows vertically with breathing room */
+  /* 1. Stack audio rows cleanly */
   .panelAudio .audioRow {
     flex-direction: column;
-    align-items: stretch;
-    gap: 10px; /* was 8px */
-    margin-bottom: 14px; /* more space between rows */
-  }
-
-  /* 2. More space above the mode toggle */
-  .audioModeRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     margin-bottom: 16px;
   }
 
-  /* 3. Make toggle buttons full-width for easier tapping */
+  /* 2. Mode toggle buttons full-width and centered */
+  .audioModeRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
   .modeToggle {
-    width: 100%;
     display: flex;
-    gap: 8px;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
   }
 
-  .modeToggle .btnToggle {
+  .btnToggle {
     flex: 1;
-    text-align: center;
-    padding: 8px 0;
+    padding: 10px 0;
+    font-size: 0.9rem;
   }
 
-  /* 4. Scale buttons: full width, spaced out */
+  /* 3. Scale buttons full-width and spaced */
   #playMajorScale,
   #playMinorScale {
     width: 100%;
     padding: 10px 0;
+    font-size: 0.95rem;
   }
 
-  /* 5. Triad/Seventh "Play all" buttons: add breathing room */
-  .audioRowCompact {
+  /* 4. Chord button grid centered and spaced */
+  .chordGrid {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
     margin-top: 10px;
+    margin-bottom: 16px;
   }
 
-  /* 6. Stop button: give it isolation */
+  .chordGrid .btnSecondary,
+  .chordGrid .chordBtn {
+    min-width: 70px;
+    padding: 8px 0;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  /* 5. Space above "Play all" buttons */
+  .audioRowCompact {
+    margin-top: 14px !important;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 6. Stop button isolated and full-width */
   #stopAudio {
-    margin-top: 18px;
+    margin-top: 24px;
     width: 100%;
     padding: 10px 0;
+    font-size: 0.95rem;
+  }
+
+  /* 7. Section spacing */
+  .audioChordSection {
+    margin-top: 20px;
+  }
+
+  .audioChordSection h4 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1rem;
   }
 }
-
