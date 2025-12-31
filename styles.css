@@ -481,12 +481,13 @@ svg {
 /* Wedges */
 .wedge {
   stroke: #cbd5f5;
-  stroke-width: 1;
+  stroke-width: 1.5;
+  fill-opacity: 0.25;
 }
 
 .selected-wedge {
   stroke: #1d4ed8;
-  stroke-width: 2;
+  stroke-width: 1.5;
   fill-opacity: 0.9;
 }
 
