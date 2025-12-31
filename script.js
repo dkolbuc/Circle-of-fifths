@@ -1,7 +1,6 @@
-/* audio fix */
 let audioCtx = null;
 
-function unlockAudio() {
+function directIOSAudioUnlock() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
@@ -10,10 +9,9 @@ function unlockAudio() {
   }
 }
 
-// Must be direct user gestures
-['touchstart', 'touchend', 'mousedown', 'click'].forEach(evt => {
-  window.addEventListener(evt, unlockAudio, { once: true });
-});
+// MUST be direct, not wrapped
+window.addEventListener('touchstart', directIOSAudioUnlock, { once: true });
+window.addEventListener('click', directIOSAudioUnlock, { once: true });
 
 
 
