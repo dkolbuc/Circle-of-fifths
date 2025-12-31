@@ -621,6 +621,47 @@ svg {
 }
 
 /* -----------------------------------------
+   MOBILE SPACING IMPROVEMENTS — SCALES
+   ----------------------------------------- */
+@media (max-width: 640px) {
+
+  /* More breathing room inside each scale block */
+  .panelScales .scaleBlock {
+    padding: 10px 0; /* was very tight */
+  }
+
+  /* Increase spacing between scale blocks */
+  .panelScales .scaleBlock + .scaleBlock {
+    margin-top: 14px;
+  }
+
+  /* Improve readability of scale note lists */
+  .panelScales p {
+    line-height: 1.5; /* was ~1.3 */
+    font-size: 1rem;  /* slightly larger for mobile */
+  }
+
+  /* Add space above section headings */
+  .panelScales h4 {
+    margin: 10px 0 6px; /* more breathing room */
+    font-size: 1.05rem;
+  }
+
+  /* Add padding around the formulas box */
+  .scaleFormulas {
+    padding: 12px;
+    margin-top: 14px;
+  }
+
+  /* Improve spacing inside formulas */
+  .scaleFormulas p {
+    margin: 6px 0;
+    line-height: 1.45;
+  }
+}
+
+
+/* -----------------------------------------
    MOBILE SPACING IMPROVEMENTS (safe patch)
    ----------------------------------------- */
 @media (max-width: 640px) {
