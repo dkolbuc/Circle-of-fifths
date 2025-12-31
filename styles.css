@@ -578,6 +578,22 @@ svg {
   }
 }
 
+/* Better spacing for formulas on mobile */
+@media (max-width: 640px) {
+
+  .scaleFormulas {
+    padding: 14px 16px; /* more left padding */
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .scaleFormulas p {
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+}
+
+
 /* MOBILE LAYOUT & LABELS */
 @media (max-width: 640px) {
 
