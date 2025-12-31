@@ -704,3 +704,57 @@ svg {
   }
 }
 
+/* -----------------------------------------
+   MOBILE SPACING IMPROVEMENTS — AUDIO PANEL
+   ----------------------------------------- */
+@media (max-width: 640px) {
+
+  /* 1. Stack audio rows vertically with breathing room */
+  .panelAudio .audioRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px; /* was 8px */
+    margin-bottom: 14px; /* more space between rows */
+  }
+
+  /* 2. More space above the mode toggle */
+  .audioModeRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  /* 3. Make toggle buttons full-width for easier tapping */
+  .modeToggle {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .modeToggle .btnToggle {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  /* 4. Scale buttons: full width, spaced out */
+  #playMajorScale,
+  #playMinorScale {
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  /* 5. Triad/Seventh "Play all" buttons: add breathing room */
+  .audioRowCompact {
+    margin-top: 10px;
+  }
+
+  /* 6. Stop button: give it isolation */
+  #stopAudio {
+    margin-top: 18px;
+    width: 100%;
+    padding: 10px 0;
+  }
+}
+
