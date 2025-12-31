@@ -169,7 +169,7 @@ const rCenter       = 70;
 const rSig          = 90;
 
 const segAngle = 360 / circle.length; // 30°
-const startAngle = -90; // C at top
+const startAngle = -104; // C at top
 
 function p2c(cx, cy, r, deg){
   const rad = deg * Math.PI / 180;
