@@ -37,19 +37,13 @@ body {
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
 }
 
+
 /* Left pane */
 .circlePane {
   border-right: 1px solid #e5e7eb;
   padding: 22px 22px 24px;
   display: flex;
   flex-direction: column;
-}
-
-@media (max-width: 640px) {
-  .circlePane {
-    overflow-y: auto;
-    max-height: 60vh; /* or 70vh depending on taste */
-  }
 }
 
 .appTitle {
@@ -112,12 +106,6 @@ body {
   z-index: 5;
   margin-bottom: 14px;
   background: #ffffff;
-}
-
-@media (max-width: 640px) {
-  .panelHeader {
-    position: static;
-  }
 }
 
 .panelHeader h2 {
@@ -493,15 +481,6 @@ svg {
   font-weight: 600;
 }
 
-@media (max-width: 640px) {
-  .majorLabel,
-  .minorLabel,
-  .degreeLabel,
-  .sigText {
-    font-size: 3.2vw; /* scales with screen width */
-  }
-}
-
 /* -----------------------------
    Scrollbar (right pane)
 ------------------------------ */
@@ -557,5 +536,47 @@ svg {
   .panelAudio .audioRow {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+
+/* MOBILE LAYOUT FIXES */
+@media (max-width: 640px) {
+
+  /* 1. Stack panes vertically instead of side-by-side */
+  .app {
+    display: block;
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  /* 2. Circle pane scrolls independently */
+  .circlePane {
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  /* 3. Make circle labels readable */
+  .majorLabel,
+  .minorLabel,
+  .degreeLabel,
+  .sigText {
+    font-size: 3.5vw;
+  }
+
+  /* 4. Disable sticky header on mobile */
+  .panelHeader {
+    position: static !important;
+    top: auto !important;
+  }
+
+  /* 5. Info pane scrolls normally (not fixed height) */
+  .infoPane {
+    overflow-y: visible !important;
+    height: auto !important;
+    max-height: none !important;
   }
 }
