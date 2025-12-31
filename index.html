@@ -32,6 +32,34 @@
         </p>
       </section>
 
+      <!-- Piano keyboard -->
+      <section class="panelSection panelPiano">
+        <h3>Piano keyboard</h3>
+
+        <div class="pianoControls">
+          <div class="pianoControlGroup">
+            <span class="label">Octave range:</span>
+            <select id="pianoOctaveRange">
+              <option value="1" selected>1 octave</option>
+              <option value="2">2 octaves</option>
+            </select>
+          </div>
+
+          <div class="pianoControlGroup">
+            <span class="label">Starting octave:</span>
+            <select id="pianoStartOctave">
+              <option value="3">C3</option>
+              <option value="4" selected>C4</option>
+              <option value="5">C5</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pianoContainer">
+          <div id="piano"></div>
+        </div>
+      </section>
+
       <!-- Audio controls -->
       <section class="panelSection panelAudio">
         <h3>Audio playback</h3>
