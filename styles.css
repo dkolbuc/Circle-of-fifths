@@ -619,3 +619,47 @@ svg {
     padding: 20px 22px 24px;
   }
 }
+
+/* -----------------------------------------
+   MOBILE SPACING IMPROVEMENTS (safe patch)
+   ----------------------------------------- */
+@media (max-width: 640px) {
+
+  /* More breathing room inside each info row */
+  .triadRow,
+  .seventhRow,
+  .cadenceRow,
+  .progressionRow {
+    padding: 10px 0; /* was 4px */
+  }
+
+  /* More space between stacked groups */
+  #majorTriads,
+  #minorTriads,
+  #majorSevenths,
+  #minorSevenths,
+  #cadenceList,
+  #progressionList {
+    margin-bottom: 18px; /* was ~6–10px */
+  }
+
+  /* More space above Play buttons in progressions */
+  .progressionPlay,
+  .progressionItem button {
+    margin-top: 10px; /* was 0–4px */
+  }
+
+  /* Slightly larger padding inside panels */
+  .panelSection {
+    padding: 18px 18px 20px; /* was 12px */
+  }
+
+  /* Improve readability of dense text blocks */
+  .progressionRow,
+  .cadenceRow,
+  .triadRow,
+  .seventhRow {
+    line-height: 1.45;
+  }
+}
+
