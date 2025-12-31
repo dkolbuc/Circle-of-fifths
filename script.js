@@ -1,3 +1,23 @@
+/* audio fix */
+
+let audioCtx = null;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+// Unlock audio on first user gesture
+['touchstart', 'touchend', 'mousedown', 'click'].forEach(evt => {
+  document.addEventListener(evt, initAudio, { once: true });
+});
+
+
+
 /* -----------------------------
    DATA MODEL (with enharmonics, musical notation)
 ------------------------------ */
@@ -562,7 +582,6 @@ document.addEventListener('click', () => {
   }
 }, { once: true });
 
-let audioCtx = null;
 let activeNodes = [];
 let playbackMode = 'arpeggio'; // 'block' or 'arpeggio'
 
@@ -576,10 +595,8 @@ const NOTE_BASES = {
   'B': 11
 };
 
-function ensureAudioContext(){
-  if (!audioCtx){
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
+function ensureAudioContext() {
+  if (!audioCtx) initAudio();
 }
 
 function parseNoteToSemitone(note){
@@ -665,8 +682,8 @@ function createPianoOscillator(freq, startTime, duration){
   noiseGain.connect(mainGain);
 
   // Piano-like ADSR envelope on mainGain
-  const attack = 0.005;
-  const decay = 0.15;
+  const attack = 0.01;
+  const decay = 0.2;
   const sustain = 0.25;
   const release = 0.4;
 
@@ -716,7 +733,7 @@ function playScale(notes, keyRoot){
   notes.forEach((n, idx) => {
     const t = now + idx * step;
     const freq = noteToFrequency(n, keyRoot);
-    playTone(freq, t, 0.5);
+    playTone(freq, t, 0.6);
   });
 }
 
