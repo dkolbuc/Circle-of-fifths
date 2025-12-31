@@ -28,10 +28,10 @@ body {
 ------------------------------ */
 .app {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.4fr);
   gap: 0;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1600px;
   height: 100vh;
   background: #ffffff;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
@@ -62,7 +62,7 @@ body {
   background: radial-gradient(circle at top, #f9fafb 0, #e5e7eb 70%);
   border-radius: 16px;
   border: 1px solid #e5e7eb;
-  padding: 16px;
+  padding: 10px;
 }
 
 .circleControls {
@@ -81,6 +81,20 @@ body {
   accent-color: #2563eb;
 }
 
+/* Subtle color tint for each key wedge */
+.wedge[data-index="0"]  { fill: hsl(0, 45%, 85%); }
+.wedge[data-index="1"]  { fill: hsl(30, 45%, 85%); }
+.wedge[data-index="2"]  { fill: hsl(55, 45%, 85%); }
+.wedge[data-index="3"]  { fill: hsl(90, 35%, 85%); }
+.wedge[data-index="4"]  { fill: hsl(130, 35%, 85%); }
+.wedge[data-index="5"]  { fill: hsl(165, 35%, 85%); }
+.wedge[data-index="6"]  { fill: hsl(200, 35%, 85%); }
+.wedge[data-index="7"]  { fill: hsl(230, 35%, 85%); }
+.wedge[data-index="8"]  { fill: hsl(260, 35%, 85%); }
+.wedge[data-index="9"]  { fill: hsl(285, 35%, 85%); }
+.wedge[data-index="10"] { fill: hsl(315, 35%, 85%); }
+.wedge[data-index="11"] { fill: hsl(340, 35%, 85%); }
+
 /* Right pane */
 .infoPane {
   padding: 16px 20px 20px;
@@ -94,7 +108,7 @@ body {
 .panelSection {
   background: #ffffff;
   border-radius: 12px;
-  padding: 14px 16px 16px;
+  padding: 16px 16px 10px;
   margin-bottom: 12px;
   border: 1px solid #e5e7eb;
 }
@@ -137,9 +151,16 @@ body {
 ------------------------------ */
 .panelAudio .audioRow {
   display: flex;
+  flex-direction: row;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panelAudio button {
+    padding: 8px 18px;
+    text-align: center;
 }
 
 .audioRowCompact {
@@ -306,6 +327,7 @@ body {
   background: #f9fafb;
   border-radius: 10px;
   border: 1px dashed #d1d5db;
+  padding: 10px 10px;
 }
 
 .scaleFormulas .label {
@@ -481,14 +503,12 @@ svg {
 /* Wedges */
 .wedge {
   stroke: #cbd5f5;
-  stroke-width: 1.5;
-  fill-opacity: 0.25;
+  fill-opacity: 0.45;
 }
 
 .selected-wedge {
-  stroke: #1d4ed8;
-  stroke-width: 1.5;
-  fill-opacity: 0.9;
+  fill-opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(37, 99, 235, 0.6));
 }
 
 /* Labels */
@@ -508,7 +528,7 @@ svg {
 
 .degreeLabel {
   fill: #4b5563;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .sigText {
