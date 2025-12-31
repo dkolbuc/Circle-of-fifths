@@ -716,7 +716,7 @@ function playScale(notes, keyRoot){
   notes.forEach((n, idx) => {
     const t = now + idx * step;
     const freq = noteToFrequency(n, keyRoot);
-    playTone(freq, t, 0.3);
+    playTone(freq, t, 0.5);
   });
 }
 
@@ -724,7 +724,7 @@ function playChord(notes, keyRoot, startTime){
   if (playbackMode === 'block'){
     notes.forEach(n => {
       const freq = noteToFrequency(n, keyRoot);
-      playTone(freq, startTime, 0.6);
+      playTone(freq, startTime, 0.8);
     });
   } else {
     notes.forEach((n, idx) => {
