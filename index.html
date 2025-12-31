@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Circle of Fifths – Interactive Music Theory Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: Circle of Fifths -->
+    <main class="circlePane">
+      <h1 class="appTitle">Circle of Fifths</h1>
+      <div id="canvas" class="circleCanvas"></div>
+
+      <div class="circleControls">
+        <label class="toggleLabel">
+          <input type="checkbox" id="showMinor" checked>
+          <span>Show minor labels on circle</span>
+        </label>
+      </div>
+    </main>
+
+    <!-- RIGHT: Learning Panel -->
+    <aside class="infoPane">
+      <!-- Key header -->
+      <section class="panelSection panelHeader">
+        <h2 id="keyTitle">C — a minor</h2>
+        <p class="keySignature">
+          <span class="label">Key signature:</span>
+          <span id="sig">0</span>
+        </p>
+      </section>
+
+      <!-- Audio controls -->
+      <section class="panelSection panelAudio">
+        <h3>Audio playback</h3>
+
+        <div class="audioModeRow">
+          <span class="label">Chord playback:</span>
+          <div class="modeToggle">
+            <button id="modeBlock" class="btnToggle" data-mode="block">Block</button>
+            <button id="modeArpeggio" class="btnToggle active" data-mode="arpeggio">Arpeggio</button>
+          </div>
+        </div>
+
+        <div class="audioRow">
+          <button id="playMajorScale" class="btn">Play major scale</button>
+          <button id="playMinorScale" class="btn">Play minor scale</button>
+        </div>
+
+        <div class="audioChordSection">
+          <h4>Triads</h4>
+          <div class="chordGrid" id="triadButtons">
+            <!-- Buttons created in JS using RN definitions -->
+          </div>
+          <div class="audioRow audioRowCompact">
+            <button id="playAllTriads" class="btn btnSecondary">Play all triads</button>
+          </div>
+        </div>
+
+        <div class="audioChordSection">
+          <h4>Seventh chords</h4>
+          <div class="chordGrid" id="seventhButtons">
+            <!-- Buttons created in JS using RN definitions -->
+          </div>
+          <div class="audioRow audioRowCompact">
+            <button id="playAllSevenths" class="btn btnSecondary">Play all sevenths</button>
+          </div>
+        </div>
+
+        <div class="audioRow audioRowCompact">
+          <button id="stopAudio" class="btn btnDanger">Stop</button>
+        </div>
+      </section>
+
+      <!-- Scales -->
+      <section class="panelSection panelScales">
+        <h3>Scales</h3>
+
+        <div class="scaleBlock">
+          <h4>Major scales</h4>
+          <p id="majorNotes"></p>
+        </div>
+
+        <div class="scaleBlock">
+          <h4>Minor scales</h4>
+          <p id="minorNotes"></p>
+        </div>
+
+        <div class="scaleBlock scaleFormulas">
+          <h4>Formulas</h4>
+          <p>
+            <span class="label">Major:</span>
+            <span id="majorFormula">W W H W W W H</span>
+          </p>
+          <p>
+            <span class="label">Natural minor:</span>
+            <span id="minorFormula">W H W W H W W</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Triads -->
+      <section class="panelSection panelTriads">
+        <h3>Triads</h3>
+        <div id="majorTriads"></div>
+        <div id="minorTriads"></div>
+      </section>
+
+      <!-- Seventh chords -->
+      <section class="panelSection panelSevenths">
+        <h3>Seventh chords</h3>
+        <div id="majorSevenths"></div>
+        <div id="minorSevenths"></div>
+      </section>
+
+      <!-- Cadence examples -->
+      <section class="panelSection panelCadences">
+        <h3>Cadence examples</h3>
+        <div id="cadenceList"></div>
+      </section>
+
+      <!-- Reference box -->
+      <section class="panelSection panelReference">
+        <h3>Quick reference</h3>
+        <p id="refRelative"></p>
+        <p id="refParallel"></p>
+        <p id="refFifthAbove"></p>
+        <p id="refFifthBelow"></p>
+      </section>
+    </aside>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
