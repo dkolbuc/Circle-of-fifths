@@ -618,7 +618,7 @@ svg {
   .minorLabel,
   .degreeLabel,
   .sigText {
-    font-size: 4.5vw !important;
+    font-size: 4vw !important;
   }
 
   /* 4. Disable sticky header on mobile */
