@@ -854,3 +854,25 @@ svg {
     padding: 10px 0;
   }
 }
+
+/* -----------------------------------------
+   TABLET FIX
+   ----------------------------------------- */
+
+@media (max-width: 1040px) {
+
+  /* 1. Stack panes vertically */
+  .app {
+    display: block;
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  /* 2. Circle pane scrolls */
+  .circlePane {
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
