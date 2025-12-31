@@ -1,8 +1,7 @@
 /* audio fix */
-
 let audioCtx = null;
 
-function initAudio() {
+function unlockAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
@@ -11,9 +10,9 @@ function initAudio() {
   }
 }
 
-// Unlock audio on first user gesture
+// Must be direct user gestures
 ['touchstart', 'touchend', 'mousedown', 'click'].forEach(evt => {
-  document.addEventListener(evt, initAudio, { once: true });
+  window.addEventListener(evt, unlockAudio, { once: true });
 });
 
 
