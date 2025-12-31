@@ -561,7 +561,7 @@ svg {
 
 @media (max-width: 640px) {
   .panelSection {
-    padding: 12px 12px 14px;
+    padding: 16px 16px 18px;
   }
 
   .appTitle {
@@ -616,5 +616,6 @@ svg {
     overflow-y: visible !important;
     height: auto !important;
     max-height: none !important;
+    padding: 20px 22px 24px;
   }
 }
