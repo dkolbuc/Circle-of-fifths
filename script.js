@@ -681,13 +681,13 @@ function parseNoteToSemitone(note){
   return semitone;
 }
 
-function noteToFrequency(note, keyRoot, octaveOffset = 0){
+function noteToFrequency(note, keyRoot){
   const baseMidiC4 = 60;
   const keyRootSemitone = parseNoteToSemitone(keyRoot);
   const tonicMidi = baseMidiC4 + keyRootSemitone;
 
   const noteSemitone = parseNoteToSemitone(note);
-  let midi = tonicMidi + (noteSemitone - keyRootSemitone) + octaveOffset * 12;
+  let midi = tonicMidi + (noteSemitone - keyRootSemitone);
 
   while (midi < 52) midi += 12;
   while (midi > 80) midi -= 12;
@@ -792,18 +792,12 @@ function playScale(notes, keyRoot){
 
   const playbackNotes = [...notes, notes[0]]; // include octave
 
-playbackNotes.forEach((n, idx) => {
-  const t = now + idx * step;
-
-  // Every step increases the octave by 1/7 of an octave.
-  // But the simplest correct approach:
-  // - first 7 notes: octaveOffset = 0
-  // - last note (octave): octaveOffset = 1
-  const octaveOffset = (idx === playbackNotes.length - 1) ? 1 : 0;
-
-  const freq = noteToFrequency(n, keyRoot, octaveOffset);
-  playTone(freq, t, 0.5);
-});
+  playbackNotes.forEach((n, idx) => {
+    const t = now + idx * step;
+    const freq = noteToFrequency(n, keyRoot);
+    playTone(freq, t, 0.5);
+  });
+}
 
 function playChord(notes, keyRoot, startTime){
   if (playbackMode === 'block'){
