@@ -160,13 +160,13 @@ canvas.appendChild(svg);
 const cx = 300, cy = 300;
 
 const rOuter        = 270;
-const rMajorInner   = 200;
-const rDegreeOuter  = 185;
-const rDegreeInner  = 155;
-const rMinorOuter   = 150;
-const rMinorInner   = 100;
-const rCenter       = 60;
-const rSig          = 80;
+const rMajorInner   = 210;
+const rDegreeOuter  = 200;
+const rDegreeInner  = 165;
+const rMinorOuter   = 170;
+const rMinorInner   = 120;
+const rCenter       = 70;
+const rSig          = 90;
 
 const segAngle = 360 / circle.length; // 30°
 const startAngle = -90; // C at top
@@ -210,7 +210,6 @@ circle.forEach((item,i)=>{
   majorWedge.setAttribute('d', wedgePath(rMajorInner, rOuter, a0, a1));
   majorWedge.classList.add('wedge');
   majorWedge.dataset.index = i;
-  majorWedge.style.fill = (i % 2 === 0) ? '#eaf6ff' : '#f7fbff';
   svg.appendChild(majorWedge);
 
   // Major label
@@ -223,25 +222,15 @@ circle.forEach((item,i)=>{
   tMajor.textContent = item.altMajor ? `${item.major} / ${item.altMajor}` : item.major;
   svg.appendChild(tMajor);
 
-  // Degree label
-  const pDeg = p2c(cx,cy,(rDegreeInner + rDegreeOuter)/2, mid);
-  const tDeg = document.createElementNS(svgNS,'text');
-  tDeg.setAttribute('x', pDeg.x);
-  tDeg.setAttribute('y', pDeg.y + 4);
-  tDeg.classList.add('degreeLabel');
-  tDeg.textContent = romanDegrees[i % 7];
-  svg.appendChild(tDeg);
-
   // Minor wedge
   const minorWedge = document.createElementNS(svgNS,'path');
   minorWedge.setAttribute('d', wedgePath(rMinorInner, rMinorOuter, a0, a1));
   minorWedge.classList.add('wedge');
   minorWedge.dataset.index = i;
-  minorWedge.style.fill = (i % 2 === 0) ? '#fff6f0' : '#fff8f4';
   svg.appendChild(minorWedge);
 
   // Minor label
-  const pMinor = p2c(cx,cy,(rMinorInner + rMinorOuter)/2, mid);
+  const pMinor = p2c(cx,cy,(rMinorInner + rMinorOuter)/1.55, mid);
   const tMinor = document.createElementNS(svgNS,'text');
   tMinor.setAttribute('x', pMinor.x);
   tMinor.setAttribute('y', pMinor.y + 4);
@@ -860,19 +849,26 @@ function selectKey(i){
   currentIndex = i;
   const data = circle[i];
 
+  // Clear previous selection
   document.querySelectorAll('.wedge').forEach(w => w.classList.remove('selected-wedge'));
   document.querySelectorAll('.majorLabel').forEach(t => t.classList.remove('selected-label'));
   document.querySelectorAll('.minorLabel').forEach(t => t.classList.remove('selected-label'));
 
+  // Highlight wedges
   document.querySelectorAll(`.wedge[data-index="${i}"]`)
-    .forEach(w => w.classList.add('selected-wedge'));
+    .forEach(w => {
+      w.classList.add('selected-wedge');
+      w.parentNode.appendChild(w); // ensure highlight is on top
+    });
 
+  // Highlight labels
   document.querySelectorAll(`.majorLabel[data-index="${i}"]`)
     .forEach(t => t.classList.add('selected-label'));
 
   document.querySelectorAll(`.minorLabel[data-index="${i}"]`)
     .forEach(t => t.classList.add('selected-label'));
 
+  // Update right panel
   document.getElementById('keyTitle').textContent = buildTitle(data);
   document.getElementById('sig').textContent = data.sig;
 
@@ -937,6 +933,7 @@ function selectKey(i){
   if (refFifthAbove) refFifthAbove.textContent = fifthInfo.up;
   if (refFifthBelow) refFifthBelow.textContent = fifthInfo.down;
 }
+
 
 /* -----------------------------
    UI WIRING: toggles & buttons
@@ -1117,4 +1114,3 @@ if (progressionListEl){
 buildChordButtons();
 setPlaybackMode('arpeggio');
 selectKey(0);
-
